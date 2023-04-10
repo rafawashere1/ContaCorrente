@@ -22,11 +22,11 @@
             {
                 Saldo -= valor;
 
-                Console.WriteLine($">> Saque no valor de {valor:F2} efetuado com sucesso!\n");
+                Console.WriteLine($">> Saque no valor de R$ {valor:F2} efetuado com sucesso!\n");
 
                 ExibirSaldo();
 
-                AdicionarMovimentacao("DEBITO", $">> Saque no valor de {valor:F2}\n");
+                AdicionarMovimentacao("DEBITO", $">> Saque no valor de R$ {valor:F2}", DateTime.Now);
 
                 Console.ReadKey();
             }
@@ -38,11 +38,11 @@
         {
             Saldo += valor;
 
-            Console.WriteLine($">> Depósito no valor de {valor:F2} efetuado com sucesso!\n");
+            Console.WriteLine($">> Depósito no valor de R$ {valor:F2} efetuado com sucesso!\n");
 
             ExibirSaldo();
 
-            AdicionarMovimentacao("CREDITO", $">> Depósito no valor de {valor:F2}\n");
+            AdicionarMovimentacao("CREDITO", $">> Depósito no valor de R$ {valor:F2}", DateTime.Now);
 
             Console.ReadKey();
 
@@ -67,19 +67,22 @@
 
                 conta.Saldo += valor;
 
-                Console.WriteLine($">> Transferencia no valor de {valor:F2} para a conta de número {conta.Numero} enviada com sucesso!\n");
+                Console.WriteLine($">> Transferencia no valor de R$ {valor:F2} para a conta número {conta.Numero} enviada com sucesso!\n");
 
                 ExibirSaldo();
 
-                AdicionarMovimentacao("DEBITO", $">> Transferencia no valor de {valor:F2} para a conta de número {conta.Numero}\n");
-            }      
+                AdicionarMovimentacao("DEBITO", $">> Transferencia no valor de R$ {valor:F2} para a conta número {conta.Numero}", DateTime.Now);
+            }
+
+
         }
 
-        public void AdicionarMovimentacao(string tipoDeMovimentacao, string mensagem)
+        public void AdicionarMovimentacao(string tipoDeMovimentacao, string mensagem, DateTime data)
         {
             Movimentacao movimentacao = new();
             movimentacao.Tipo = tipoDeMovimentacao;
             movimentacao.Mensagem = mensagem;
+            movimentacao.Data = data;
 
             for (int i = 0; i < movimentacoes.Length; i++)
             {
@@ -92,27 +95,33 @@
 
         public void ExibirExtrato()
         {
-            Program.ColorirMensagem("-------------------------- Extrato --------------------------\n", "QUEBRAR-LINHA", ConsoleColor.Yellow);
+            Program.ColorirMensagem("------------------------------------ Extrato --------------------------------------\n", "QUEBRAR-LINHA", ConsoleColor.Yellow);
 
             for (int i = 0; i < indice; i++)
             {
                 if (movimentacoes[i].Tipo == "DEBITO")
                 {
-                    Program.ColorirMensagem(movimentacoes[i].Mensagem, "QUEBRAR-LINHA", ConsoleColor.Red);
+                    
+                    Program.ColorirMensagem(movimentacoes[i].Mensagem, "NAO-QUEBRAR-LINHA", ConsoleColor.Red);
+                    Program.ColorirMensagem(" | ", "NAO-QUEBRAR-LINHA", ConsoleColor.DarkYellow);
+                    Program.ColorirMensagem($"{movimentacoes[i].Data.ToString("dd/MM/yyyy HH:mm:ss")}\n\n", "NAO-QUEBRAR-LINHA", ConsoleColor.Cyan);
+                    
                 }
 
                 else if (movimentacoes[i].Tipo == "CREDITO")
                 {
-                    Program.ColorirMensagem(movimentacoes[i].Mensagem, "QUEBRAR-LINHA", ConsoleColor.Green);
+                    Program.ColorirMensagem(movimentacoes[i].Mensagem, "NAO-QUEBRAR-LINHA", ConsoleColor.Green);
+                    Program.ColorirMensagem(" | ", "NAO-QUEBRAR-LINHA", ConsoleColor.DarkYellow);
+                    Program.ColorirMensagem($"{movimentacoes[i].Data.ToString("dd/MM/yyyy HH:mm:ss")}\n\n", "NAO-QUEBRAR-LINHA", ConsoleColor.Cyan);
                 }
             }
 
-            Program.ColorirMensagem("-------------------------- Extrato --------------------------\n", "QUEBRAR-LINHA", ConsoleColor.Yellow);
+            Program.ColorirMensagem("------------------------------------ Extrato --------------------------------------\n", "QUEBRAR-LINHA", ConsoleColor.Yellow);
         }
 
         public void ExibirSaldo()
         {
-            Console.WriteLine($">> Seu saldo é: {Saldo:F2}\n");
+            Console.WriteLine($">> Seu saldo é: R$ {Saldo:F2}\n");
         }
     }
 }

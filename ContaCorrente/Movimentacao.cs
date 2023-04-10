@@ -4,6 +4,7 @@
     {
         public string Tipo { get; set; }
         public string Mensagem { get; set; }
+        public DateTime Data { get; set; }
 
     }
 }
